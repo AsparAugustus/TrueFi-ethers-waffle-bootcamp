@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+/**
+ * EtherSplitter
+ * Splits transferred Ether
+ */
+
+ // 1. accepts ETH from msg.sender -
+ // Revert when not sent any ether -
+ // Test balance before and after splitting
+
+ // 2. Splits ETH and send to 2 accounts
+
+ // 3. Return remainder to msg.sender
+ // 4. Revert if...
+
+ //Add blockchain events for splits
+
+ //add event if non-zero remainder is returned
+
+contract EtherSplitter {
+
+    //Declare an Event
+    event Remainder(address indexed _from,  uint _value);
+
+
+
+    constructor(address payable target1, address payable target2) {
+        address _target1 = target1;
+        address _target2 = target2;
+    }
+
+
+
+    function split(target1, target2) internal {
+
+        require(msg.value > 0);
+
+        uint received = msg.value;
+        uint remainder = received%2;
+
+        if (remainder > 0) {
+            msg.sender.transfer(remainder);
+            //Emit an event
+            emit Remainder(msg.sender, remainder);
+        }
+
+        uint splitted = received/2;
+
+
+
+        _target1.transfer(splitted);
+
+        _target2.transfer(splitted);
+        
+
+
+    }
+
+    function Receive() public payable {
+        if (msg.value > 0) {
+            split();
+        }
+    }
+
+}
